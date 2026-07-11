@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="UTF-8" name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0,user-scalable=0">
+	<title>Leafnotes</title>
+	<!--
+	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+	作者注：
+	
+	本网站仅作学习交流，切勿用于商业用途！如果需要可以联系作者（见“联系方式”）
+
+	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	-->
+	<link rel="stylesheet" href="css/style.css">
+	<script>alert("欢迎来到Leafnotes！本网站仅作学习交流，切勿用于商业用途！如果需要可以联系作者")</script>
+
+</head>
+
+<body>
+
+	<nav>
+		<span
+			style="float: left; padding: 10px 20px; color: green; font-size: 150%;font-weight: bolder;">Leafnotes🍀</span>
+		<a href="#home" class="active">主页</a>
+		<a href="#tool">工具</a>
+		<a href="#entertainment">娱乐中心</a>
+		<a href="#aichat">AI小助手</a>
+		<a href="#discuss">评论区</a>
+		<a href="#settings">设置与说明</a>
+	</nav>
+
+	<main>
+		<section id="home" class="active">
+			<h1>介绍</h1>
+			<p style="text-align: center;background-color: rgba(137, 43, 226, 0.5);color: white;">
+				<i>大家好！</i><br />欢迎来到我人生中创建的<b>第一个</b>网站！这里有丰富多彩的内容和功能等你来发现！
+			</p>
+			<h1>在线时间</h1>
+			<p class="w">这里记录的所有时间均以北京时间【UTC（世界协调时，全球时间标准）+8：00】</p>
+			<div class="time-container" id="timeDisplay"></div>
+			<h1>每日新闻</h1>
+			<p class="i">看看今天又有那些新鲜事？</p>
+			<div class="container">
+				<button class="btn" id="loadBtn">📰 点击加载今日新闻</button>
+				<div id="content" style="display:none;">
+					<h1 id="newsTitle"></h1>
+					<div class="date-info" id="dateInfo"></div>
+					<div id="newsList"></div>
+					<div class="weiyu-box" id="weiyuBox" style="display:none;"></div>
+				</div>
+				<div id="loading" class="loading" style="display:none;">加载中...</div>
+				<div id="error" class="error" style="display:none;"></div>
+			</div>
+		</section>
+		<section id="tool">
+			<h1>网站推荐</h1>
+			<p class="i">以下分享的是本人喜欢的冷门、实用的网站，全程无广</p>
+			<ul>
+				<li>Markdown在线编辑</li>
+				<p class="i">Markdown是一种轻量级标记语言，对于记笔记等很方便。</p>
+				<a href="https://markdown.com.cn/">更多信息</a>
+				<a href="https://tool.lu/markdown/">源站</a>
+				<li>Geogebra</li>
+				<p class="i">好用的作图网站</p>
+				<a href="https://www.geogebra.org/">源站</a>
+				<li>听歌</li>
+				<p class="i">免费听歌，下载</p>
+				<a href="https://www.gequbao.com/">源站</a>
+			</ul>
+
+			<h1><i class="fas fa-volume-up"></i> 智能文本转语音工具</h1>
+			<p class="w">调用Web Speech API</p>
+			<p class="i">将您的文字转换为自然语音播放。</p>
+			<textarea id="text-to-speak" placeholder="请输入要转换为语音的文字..."></textarea>
+			<label for="language-select"><i class="fas fa-globe"></i> 语言</label>
+			<select id="language-select">
+				<option value="zh-CN">中文（普通话）</option>
+				<option value="en-US">英语（美国）</option>
+				<option value="ja-JP">日语</option>
+			</select>
+			<label for="volume-slider"><i class="fas fa-volume-up"></i> 音量</label>
+			<input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1">
+			<span id="volume-value">1</span>
+			<label for="rate-slider"><i class="fas fa-tachometer-alt"></i> 语速</label>
+			<input type="range" id="rate-slider" min="0.3" max="3" step="0.1" value="1">
+			<span id="rate-value">1</span>
+			<label for="pitch-slider"><i class="fas fa-music"></i> 语调</label>
+			<input type="range" id="pitch-slider" min="0.5" max="2" step="0.1" value="1">
+			<span id="pitch-value">1</span>
+			<button id="play"><i class="fas fa-play"></i> 播放</button>
+			<button id="pause"><i class="fas fa-pause"></i> 暂停</button>
+			<button id="resume"><i class="fas fa-forward"></i> 继续</button>
+			<span class="highlight" id="status-message">准备就绪</span>
+			<h2>随机一言</h2>
+			<div class="container">
+				<header>
+					<p class="i">每一次刷新，遇见一句触动心灵的箴言｜本网页包含来自世界各地的名言警句</p>
+				</header>
+				<p>✦----------------------------------------------------✦</p>
+				<div class="quote-box">
+					<div id="quoteDisplay" class="quote-content fade-in">
+						生命中最美好的事情都是免费的。
+					</div>
+					<div id="quoteAuthor" class="quote-author">
+						— 佚名
+					</div>
+				</div>
+				<p>✦-----------------------------------------------------✦</p>
+				<button id="refreshBtn">
+					<i class="fas fa-sync-alt"></i> 换一句名言
+				</button>
+			</div>
+
+			<h2>一元二次方程求解器</h2>
+			<p class="w">结果保留两位小数；支持复数。<br /> a、b、c的值与方程有关。例如，3x²+4x-5=0中：a=3,b=4,c=-5.</p>
+			<p class="i">快速计算任意一个一元二次方程的根情况</p>
+			<p>请输入方程 ax² + bx + c = 0 的系数：</p>
+			<div class="input-group">
+				a = <input type="number" id="a" step="any" required>
+				b = <input type="number" id="b" step="any" required>
+				c = <input type="number" id="c" step="any" required>
+			</div>
+			<button onclick="calculateRoots()">计算根</button>
+			<div id="result"></div>
+			<h2>网页节拍器（优化版）</h2>
+			<p class="w">要求性能较高，否则可能不稳定。</p>
+			<p class="i"> BPM是指在一分钟内的节拍数量，通常用于音乐中来表示节奏的快慢。</p>
+			<div class="controls">
+				<label for="bpm">BPM:</label>
+				<input type="number" id="bpm" value="120" min="20" max="300">
+				<div>
+					<button id="startBtn" onclick="startMetronome()">开始</button>
+					<button id="stopBtn" onclick="stopMetronome()" disabled>停止</button>
+				</div>
+			</div>
+			<div id="visual"></div>
+			<h2>日历</h2>
+			<p class="i">支持月份切换</p>
+			<div class="calendar-container">
+				<div class="navigation">
+					<button id="prevMonth">上个月</button>
+					<h2 class="month-header" id="monthYear"></h2>
+					<button id="nextMonth">下个月</button>
+				</div>
+				<table id="calendar">
+					<thead>
+						<tr>
+							<th>周一</th>
+							<th>周二</th>
+							<th>周三</th>
+							<th>周四</th>
+							<th>周五</th>
+							<th>周六</th>
+							<th>周日</th>
+						</tr>
+					</thead>
+					<tbody id="calendar-body">
+					</tbody>
+				</table>
+			</div>
+		</section>
+		<section id="entertainment">
+			<h1>音乐鉴赏</h1>
+			<h2>君往何处 (Quo Vadis)</h2>
+			<p class="w">2:24 主要乐器：小提琴</p>
+			<p class="i">优雅永不过时！<br />
+				Composed by M2U Visualized by LRAY</p>
+			<dialog id="model">
+				<form method="dialog">
+					<iframe
+						src="https://player.bilibili.com/player.html?isOutside=true&aid=611211596&bvid=BV1G84y1w7WD&cid=1060133138&p=1"
+						scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"
+						width="1200px" height="800px"></iframe>
+					<button>关闭</button>
+				</form>
+			</dialog>
+			<button onclick="model.showModal()">查看</button>
+			<h2>HARPY HARE</h2>
+			<p class="w">1:18 类型:funk</p>
+			<p class="i">可能我已经疯了...<br />
+				（funk又称放克音乐，是20世纪60年代中期起源于美国的一种音乐形式，以节奏驱动为核心特征，被视为连接灵魂乐与迪斯科的过渡类型。鼓与贝斯的复合律动主导模式，吉他、号乐及即兴人声共同构建亢奋氛围。）<br />
+				Author:NoAki%Skyver</p>
+			<dialog id="model2">
+				<form method="dialog">
+					<iframe
+						src="https://player.bilibili.com/player.html?isOutside=true&aid=114838097501414&bvid=BV1Tnu7zKEre&cid=30990205832&p=1"
+						scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"
+						width="1200px" height="800px>"></iframe>
+					<button>关闭</button>
+				</form>
+			</dialog>
+			<button onclick="model2.showModal()">查看</button>
+			<h1>推荐视频</h1>
+			<p class="i">这是一个信息爆炸的时代。在时代的洪流之下，我们的生活节奏越来越快。短视频取代了长视频，网络代替了报纸。我们没有时间去思考，我们变得越来越浮躁。我们该怎么办？</p>
+			<a href="https://www.bilibili.com/video/BV1UY1eBoEV5">跳转</a>
+			<h1>小游戏</h1>
+			<figure>
+				<img
+					src="https://store-images.s-microsoft.com/image/apps.3343.9007199266251606.f9459c88-609f-40df-aa7c-f864f4965cd0.c82e9c30-5a81-4eec-a4a9-290f8c3f31c2?h=210">
+				<figcaption> Flappy Bird</figcaption>
+			</figure>
+			<button id="button1" onclick="loadIframe(1)">▶点击游玩</button>
+			<iframe id="iframe1" style="display: none;" width="288px" height="505px"></iframe>
+			<figure>
+				<img
+					src="https://ts3.tc.mm.bing.net/th/id/ODF.JMzcnOfBr9CtL38JSvD0uA?w=32&h=32&qlt=91&pcl=fffffa&o=6&pid=1.2">
+				<figcaption>扫雷</figcaption>
+			</figure>
+			<button id="button2" onclick="loadIframe(2)">▶点击游玩</button>
+			<iframe id="iframe2" style="display: none;" width="600px" height="400px"></iframe>
+			<figure>
+				<img src="https://pic.j9p.com/up/2022-5/2022512165311906.png">
+				<figcaption>2048</figcaption>
+			</figure>
+			<button id="button3" onclick="loadIframe(3)">▶点击游玩</button>
+			<iframe id="iframe3" style="display: none;" width="400px" height="600px"></iframe>
+			<h1>MC在线</h1>
+			<p class="i">可以在浏览器上运行的MC！</p>
+			<a href="https://www.minecraft.net/zh-hans">中文官方网站</a>
+			<a hre="fhttps://www.mc.js.cool/">源站</a>
+		</section>
+		<section id="aichat">
+			<h1>AI小助手</h1>
+			<p class="w">禁止发送敏感违法和无意义内容。不建议输入太复杂的内容。由于某些政策因素，现已换源。</p>
+			<p class="i">算是个轻量级的AI。虽然速度较慢（非流式输出），且UI较简陋，但是极为稳定。可能还会有许多问题，欢迎提出。</p>
+			<iframe src="html/AI.html" frameborder="0" width="80%" height="1000px" loading="lazy"></iframe>
+		</section>
+		<section id="discuss">
+			<iframe src="https://cn.anotepad.com/note/read/jta55qmx" width="95%" height="800px" loading="lazy"></iframe>
+		</section>
+		<section id="settings">
+			<h1>主题设置</h1>
+			<button id="darkModeButton">深色模式</button>
+			<button id="lightModeButton">浅色模式</button>
+			<label for="textColor">文本颜色:</label>
+			<input type="color" id="textColor">
+			<label for="backgroundColor">背景颜色:</label>
+			<input type="color" id="backgroundColor">
+			<h1>更新日志</h1>
+			<p class="i">重磅更新！新版本它来啦！</p>
+			<button class="toggle-btn" onclick="toggleIframe()">展开内容 ▼</button>
+			<div class="iframe-container" id="iframeContainer">
+				<iframe src="./html/History.html" title="示例内容"></iframe>
+			</div>
+			<h1>关于网站</h1>
+			<h2>致谢</h2>
+			<ul type="square">
+				<li>感谢这个视频，它教会了我如何做网页！<a href="https://www.bilibili.com/video/BV1jj411P7Yp?">点击观看</a><br />
+					你也可以查看简洁的文档说明。<a href="https://www.w3school.com.cn/">参考文档</a></li>
+				<li>感谢Infinityfree提供服务器！<a href="https://infinityfree.com/">点击进入</a></li>
+				<li>同时也对所有提供帮助的人、网站等一致表示谢意！</li>
+			</ul>
+			<h2>背景</h2>
+			<ul>
+				<li>这是一个奇迹！同时，这条路的确很难走。在我面前的挑战还有许多。家长的阻拦，技术的薄弱...光是代码就前前后后调试了上万次，都是本人奋斗的成果，智慧的结晶。<br />
+					甚至我已经用掉了宝贵的约<b>1000+个小时</b>来成功地实现自己的梦想！所有的努力都是值得的！我坚信：<i><b>乘风破浪会有时，直挂云帆济沧海</b></i>！机会只留给有准备的人！:-
+					&#41;
+				</li>
+				<li>抱歉，由于我只是个中学生，所以水平不好，可能有<b>错误</b>。...我相信以后会再迭代的...欢迎提出建议！（见“联系方式”与“评论区”）</li>
+				<li>由于本人技术所限，许多功能都要辅助AI和第三方插件与API。<i><b>我不是什么创世神，我只是站在了巨人的肩膀上。</b></i></li>
+			</ul>
+			<h2>疑难解答（FAQ）</h2>
+			<h3>安全相关</h3>
+			<p class="w">为什么浏览器报毒？</p>
+			<p>纯粹误报。可能是顶级域名的原因。但请放心，本网站无恶意病毒脚本，信誉担保。</p>
+			<p class="w">此网站是否会收集个人信息？</p>
+			<p>一般不会，除评论会使用昵称和时间信息。即使无意收集了信息不过我们不会进行利用与分析，也没有必要。</p>
+			<h3>使用相关</h3>
+			<p class="w">为何有的版块无法使用？</p>
+			<p>原因包括但不限于：a）客户端：1.网络连接问题 2. 硬件配置问题 3.浏览器问题 b）服务端：1.代码问题；2.API请求问题 c）服务器：相关文件失效或停用。<br />
+				解决方法：1.确认网络畅通；2.确认硬件和版本等要求满足；3.直接反馈。</p>
+			<h3>其它</h3>
+			<p class="w">关于第三方内容？</p>
+			<p>此平台仅作分享用途，第三方内容与本站无关。如果您认为侵犯了您的权益，请联系我们，我们会在28个自然日内审理。</p>
+			<h2>联系方式</h2>
+			<p class="w">定期查看，非诚勿扰</p>
+			<ul type="circle">
+				<li>邮箱：***.com</li>
+				<li>QQ：**********</li>
+				<li>B站：********* @***** 关于作者个人空间：<a href="https://space.bilibili.com/***">点击进入</a></li>
+				<li>或者直接评论😘</li>
+			</ul>
+			<p style="font-size: 2em;font-weight: bold;">持续更新 无限进步 \(￣︶￣*\) &#41;</p>
+		</section>
+	</main>
+	<script src="js/main.js" defer></script>
+</body>
+
+<footer>
+	<hr width="50%" size="2px">
+	<p class="class">Copyright © 2025 by traveller,All Rights Reserved.</p>
+	<p class="class">已到达世界最低城</p>
+</footer>
+
+</html>

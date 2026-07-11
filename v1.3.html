@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="UTF-8">
+	<title>My Webpage</title>
+</head>
+
+<body>
+	<h1>介绍</h1>
+	<p><i>大家好！</i><br />欢迎来到我人生中创建的<b>第一个</b>网页！这里为您准备了丰富多彩的内容。</p>
+	<p class="test1">经测试，您使用的设备为手机（指安卓、iOS等系统）</p>
+	<p class="test2">经测试，您使用的设备为平板（指安卓、iOS等系统，但介于手机与电脑之间）</p>
+	<p class="test3">经测试，您使用的设备为电脑（指windows、MACOSX等系统）</p>
+	<img src="https://p1.ssl.qhimgs1.com/t0423bf458ad60213f1.jpg" alt="美景" height="300px" title="美景">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			max-width: 600px;
+			margin: 20px auto;
+			padding: 20px;
+		}
+
+		.input-group {
+			margin: 10px 0;
+		}
+
+		input {
+			width: 80px;
+			padding: 5px;
+		}
+
+		button {
+			padding: 8px 20px;
+			background: #4CAF50;
+			color: white;
+			border: none;
+			cursor: pointer;
+		}
+
+		#result {
+			margin-top: 20px;
+			padding: 15px;
+			background: #f0f0f0;
+			border-radius: 5px;
+		}
+
+		p {
+			font-size: 18px;
+			font-weight: 400;
+			text-indent: 20px;
+		}
+
+		table,
+		td {
+			border: 1px solid;
+			text-align: center;
+		}
+
+		table {
+			border-collapse: collapse;
+			width: 600px;
+			height: 500px;
+		}
+
+		.class {
+			color: rgba(0, 0, 0, 0.5);
+			text-align: center;
+			font-size: 15px;
+		}
+
+		button:disabled {
+			background-color: #cccccc;
+		}
+
+		#visual {
+			width: 200px;
+			height: 200px;
+			background-color: #f0f0f0;
+			margin: 20px auto;
+			border-radius: 50%;
+			transition: background-color 0.1s;
+		}
+
+		@media screen and (max-width:768px) {
+			.test1 {
+				display: block;
+			}
+
+			.test2 {
+				display: none;
+			}
+
+			.test3 {
+				display: none;
+			}
+		}
+
+		@media screen and (min-width:768px) and (max-width:996px) {
+			.test1 {
+				display: none;
+			}
+
+			.test2 {
+				display: block;
+			}
+
+			.test3 {
+				display: none;
+			}
+		}
+
+		@media screen and (min-width: 996px) {
+			.test1 {
+				display: none;
+			}
+
+			.test2 {
+				display: none;
+			}
+
+			.test3 {
+				display: block;
+			}
+		}
+	</style>
+	</head>
+
+	<body>
+		<h2>一元二次方程求解器</h2>
+		<p>请输入方程 ax² + bx + c = 0 的系数：</p>
+
+		<div class="input-group">
+			a = <input type="number" id="a" step="any" required>
+			b = <input type="number" id="b" step="any" required>
+			c = <input type="number" id="c" step="any" required>
+		</div>
+
+		<button onclick="calculateRoots()">计算根</button>
+
+		<div id="result"></div>
+
+		<script>
+			function calculateRoots() {
+				// 获取输入值
+				const a = parseFloat(document.getElementById('a').value);
+				const b = parseFloat(document.getElementById('b').value);
+				const c = parseFloat(document.getElementById('c').value);
+
+				// 验证输入
+				if (isNaN(a) || isNaN(b) || isNaN(c)) {
+					showResult("请输入有效的数字！");
+					return;
+				}
+
+				// 处理特殊情况
+				if (a === 0) {
+					showResult("a不能为0（这不是二次方程）");
+					return;
+				}
+
+				// 计算判别式
+				const discriminant = b * b - 4 * a * c;
+				let resultText = "";
+
+				if (discriminant > 0) {
+					const root1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+					const root2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+					resultText = `有两个不相等的实数根：<br>
+                             x₁ = ${root1.toFixed(2)}<br>
+                             x₂ = ${root2.toFixed(2)}`;
+				} else if (discriminant === 0) {
+					const root = -b / (2 * a);
+					resultText = `有一个相等的实数根：<br>
+                             x = ${root.toFixed(2)}`;
+				} else {
+					const realPart = (-b / (2 * a)).toFixed(2);
+					const imaginaryPart = (Math.sqrt(-discriminant) / (2 * a)).toFixed(2);
+					resultText = `没有实数根，有共轭复数根：<br>
+                             x₁ = ${realPart} + ${imaginaryPart}i<br>
+                             x₂ = ${realPart} - ${imaginaryPart}i`;
+				}
+
+				showResult(resultText);
+			}
+
+			function showResult(text) {
+				document.getElementById('result').innerHTML = text;
+			}
+		</script>
+
+		<h2>网页节拍器（优化版）</h2>
+
+		<div class="controls">
+			<label for="bpm">BPM：</label>
+			<input type="number" id="bpm" value="120" min="20" max="300">
+
+			<div>
+				<button id="startBtn" onclick="startMetronome()">开始</button>
+				<button id="stopBtn" onclick="stopMetronome()" disabled>停止</button>
+			</div>
+		</div>
+
+		<div id="visual"></div>
+
+		<script>
+			let audioContext;
+			let isRunning = false;
+			let nextTickTime = 0;
+			let interval = 0;
+			const visual = document.getElementById('visual');
+
+			// 初始化音频环境
+			function initAudio() {
+				if (!audioContext) {
+					audioContext = new (window.AudioContext || window.webkitAudioContext)();
+				}
+			}
+
+			// 生成节拍声
+			function playTick() {
+				const oscillator = audioContext.createOscillator();
+				const gainNode = audioContext.createGain();
+
+				oscillator.frequency.setValueAtTime(880, audioContext.currentTime); // 频率
+				gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+
+				oscillator.connect(gainNode);
+				gainNode.connect(audioContext.destination);
+
+				oscillator.start();
+				gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+				oscillator.stop(audioContext.currentTime + 0.1);
+
+				// 视觉反馈
+				visual.style.backgroundColor = '#4CAF50';
+				setTimeout(() => {
+					visual.style.backgroundColor = '#f0f0f0';
+				}, 50);
+			}
+
+			// 使用 requestAnimationFrame 实现高精度定时
+			function scheduleTicks() {
+				if (!isRunning) return;
+
+				const currentTime = audioContext.currentTime * 1000; // 转换为毫秒
+				while (nextTickTime <= currentTime) {
+					playTick();
+					nextTickTime += interval;
+				}
+
+				requestAnimationFrame(scheduleTicks);
+			}
+
+			// 开始节拍器
+			function startMetronome() {
+				if (isRunning) return;
+
+				initAudio();
+				const bpm = parseInt(document.getElementById('bpm').value);
+				interval = 60000 / bpm; // 计算间隔时间（毫秒）
+
+				isRunning = true;
+				document.getElementById('startBtn').disabled = true;
+				document.getElementById('stopBtn').disabled = false;
+
+				nextTickTime = audioContext.currentTime * 1000; // 初始化下一拍时间
+				scheduleTicks(); // 启动调度
+			}
+
+			// 停止节拍器
+			function stopMetronome() {
+				isRunning = false;
+				document.getElementById('startBtn').disabled = false;
+				document.getElementById('stopBtn').disabled = true;
+				visual.style.backgroundColor = '#f0f0f0';
+			}
+
+			// 输入验证
+			document.getElementById('bpm').addEventListener('input', function (e) {
+				let value = parseInt(e.target.value);
+				if (value < 1) value = 1;
+				if (value > 300) value = 300;
+				e.target.value = value;
+			});
+		</script>
+		<h2>2025年2月日历</h2>
+		<table>
+			<tr>
+				<td>周一</td>
+				<td>周二</td>
+				<td>周三</td>
+				<td>周四</td>
+				<td>周五</td>
+				<td>周六</td>
+				<td>周日</td>
+			</tr>
+			<tr>
+				<td colspan="5"></td>
+				<td>1 <br>初四</td>
+				<td>2</td>
+			</tr>
+			<tr>
+				<td>3<br>
+					立春
+				</td>
+				<td>4</td>
+				<td>5</td>
+				<td>6</td>
+				<td>7</td>
+				<td>8</td>
+				<td>9</td>
+			</tr>
+			<tr>
+				<td>10</td>
+				<td>11</td>
+				<td>12<br>
+					元宵节
+				</td>
+				<td>13</td>
+				<td>14<br>
+					情人节
+				</td>
+				<td>15</td>
+				<td>16</td>
+			</tr>
+			<tr>
+				<td>17</td>
+				<td>18 <br>
+					雨水（节气）
+				</td>
+				<td>19</td>
+				<td>20</td>
+				<td>21</td>
+				<td>22</td>
+				<td>23</td>
+			</tr>
+			<tr>
+				<td>24</td>
+				<td>25</td>
+				<td>26</td>
+				<td>27</td>
+				<td>28</td>
+				<td colspan="2"></td>
+			</tr>
+		</table>
+		<h1>更多内容</h1>
+		<h2>致谢</h2>
+		<ul type="square">
+			<li>感谢这个视频，它教会了我如何做网页！<a href="https://www.bilibili.com/video/BV1jj411P7Yp?">点击观看</a></li>
+			<li>感谢该网站的翻译服务！<a href="https://fanyi.so.com/">点击进入</a></li>
+			<li>感谢北沚外链网盘的文件存储及传输服务！<a href="https://file.b-z.ink/">点击进入</a></li>
+			<li>感谢DeepSeek(深度求索，AI(人工智能))，它为我编写了一些JavaScript方面的内容（不会(ο̬̬̬̬̬̬̬̏̃ɷο̬̬̬̬̬̬̬̏̃)）。<a
+					href="https://www.deepseek.com/">点击进入</a></li>
+			<li>感谢软件《朝花夕拾》为我们部署！</li>
+			<li>感谢该网站的信息采集及存储服务！<a href="https://anotepad.com/">点击进入</a></li>
+		</ul>
+		<h2>背景</h2>
+		<ul>
+			<li>这条路的确很难走。光是代码就前前后后调试了数百次，bug (错误）也一堆。<br />甚至我已经用掉了宝贵的约<b>18个小时</b>来成功地实现自己的梦想！所有的努力都是值得的！ :)
+			</li>
+			<li>抱歉，由于我只是个中学生，所以水平不好，可能有<b>错误</b>。欢迎提出建议！（见“联系方式”）</li>
+		</ul>
+		<h2>联系方式</h2>
+		<ul type="circle">
+			<li>邮箱：***.com</li>
+			<li>QQ：**********</li>
+			<li><a href="https://cn.anotepad.com/note/read/xq9qg7mg">在线评论</a></li>
+		</ul>
+		<h2>更新日志</h2>
+		<ol>
+			<li>
+				<h3>v0.1 2025/2/1 22:40</h3>
+				<p>首捷！</p>
+			</li>
+			<li>
+				<h3>v0.2 2025/2/2 1:42</h3>
+			</li>
+			<p>初步</p>
+			<li>
+				<h3>v0.3 2025/2/2 22:06</h3>
+				<p>我几乎完成了这个看上去有点丑的网页的主体，但我已经尽力！>^< </p>
+			</li>
+			<li>
+				<h3>v0.4 2025/2/2 22:59</h3>
+				<p>1.修复了一些bug
+					2.它能够分享了！</p>
+			</li>
+			<li>
+				<h3>v0.5 2025/2/4 14:56</h3>
+				<p>1.已部署，也就是说它连接了互联网，也有了自己的网址（只是网址太……）
+					2.增加“一元二次方程求解器”</p>
+			</li>
+			<li>
+				<h3>v1.0 2025/2/5 18:23</h3>
+				<p>恭喜！My Webpage正式登场！
+					1.完成汉化工作
+					2.使用css（层叠样式表，用来美化网页）完善页面</p>
+			<li>
+				<h3>v1.1 2025/2/12 22:08</h3>
+				<p>优化
+					最近压力好大，后面就随缘更新了（也没啥更的了）
+					我讨厌开学！还有一堆作业😫
+					(˃ ⌑ ˂ഃ )
+				</p>
+			</li>
+			<li>
+				<h3>v1.2 2025/2/23 00:03</h3>
+				<p>加入功能“节拍器”</p>
+			</li>
+			<li>
+				<h3>v1.3 2025/2/23 18:12</h3>
+				<p>加入媒体查询功能，优化</p>
+			</li>
+		</ol>
+		<h4>持续更新……</h4>
+		<h2>@旅行者 制作</h2>
+		<p class="class">已到达世界最低城</p>
+		<hr width="600th" size="2px">
+	</body>
+
+</html>
